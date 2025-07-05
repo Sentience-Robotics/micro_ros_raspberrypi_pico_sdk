@@ -6,23 +6,67 @@
 #include <rclc/executor.h>
 #include <std_msgs/msg/int32.h>
 #include <rmw_microros/rmw_microros.h>
+#include <std_msgs/msg/string.h>
 
 #include "pico/stdlib.h"
+#include "pico/stdio_usb.h"
 #include "pico_uart_transports.h"
 
-const uint LED_PIN = 25;
+#include "hardware/pwm.h"
+#include "ws2812_leds/ws2812_set_rgb.h"
+#include "ws2812_leds/ws2812.h"
+#include <rmw_microros/rmw_microros.h>
+
+// Function to set servo angle using PWM (not working properly)
+void set_servo_angle(uint pin, int angle) {
+    uint slice = pwm_gpio_to_slice_num(pin);
+    pwm_set_gpio_level(pin, 500 + (angle * 1000 / 180)); // Pulse width in µs mapped to 0.5ms - 2.5ms
+    pwm_set_enabled(slice, true);
+}
 
 rcl_publisher_t publisher;
-std_msgs__msg__Int32 msg;
+rcl_subscription_t subscriber;
+std_msgs__msg__Int32 msg_int;
+std_msgs__msg__Int32 msg_int_sub;
 
 void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
-    rcl_ret_t ret = rcl_publish(&publisher, &msg, NULL);
-    msg.data++;
+     if (timer != NULL) {
+        printf("Timer: %d\n", msg_int.data);
+        set_servo_angle(1, msg_int.data); // Contrôle servo GPIO 1
+        rcl_publish(&publisher, &msg_int, NULL);
+        msg_int.data = (msg_int.data + 10) % 180;
+    }
+}
+
+void subscription_callback(const void * msgin);
+
+void subscription_callback(const void * msgin)
+{
+    const std_msgs__msg__Int32 * incoming = (const std_msgs__msg__Int32 *)msgin;
+    int value = incoming->data;
+    ws2812_set_rgb(2, 0, value, value);
+    set_servo_angle(3, value);
+
+    // // Envoyer un message confirmant la réception
+    // msg_int.data = angle;
+    // rcl_publish(&publisher, &msg_int, NULL);
 }
 
 int main()
 {
+    stdio_init_all();
+
+    while (!stdio_usb_connected()) {
+        sleep_ms(100);
+    }
+
+    // Initialize WS2812 LEDs (using PIO 1, pin 18, 800kHz)
+    ws2812_init(pio1, 18, 800000.0f);
+    ws2812_clear();
+
+
+    printf("Entering program...\n");
     rmw_uros_set_custom_transport(
 		true,
 		NULL,
@@ -32,8 +76,19 @@ int main()
 		pico_serial_transport_read
 	);
 
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
+    // Servo
+    gpio_set_function(1, GPIO_FUNC_PWM);
+    gpio_set_function(2, GPIO_FUNC_PWM);
+    gpio_set_function(3, GPIO_FUNC_PWM);
+    uint slice1 = pwm_gpio_to_slice_num(1);
+    uint slice2 = pwm_gpio_to_slice_num(2);
+    uint slice3 = pwm_gpio_to_slice_num(3);
+    pwm_set_wrap(slice1, 20000); // For ~50Hz PWM (20ms period)
+    pwm_set_clkdiv(slice1, 125.0); // Set clock divisor for 1us resolution
+    pwm_set_wrap(slice2, 20000);
+    pwm_set_clkdiv(slice2, 125.0);
+    pwm_set_wrap(slice3, 20000);
+    pwm_set_clkdiv(slice3, 125.0);
 
     rcl_timer_t timer;
     rcl_node_t node;
@@ -44,7 +99,7 @@ int main()
     allocator = rcl_get_default_allocator();
 
     // Wait for agent successful ping for 2 minutes.
-    const int timeout_ms = 1000; 
+    const int timeout_ms = 1000;
     const uint8_t attempts = 120;
 
     rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, attempts);
@@ -58,11 +113,28 @@ int main()
     rclc_support_init(&support, 0, NULL, &allocator);
 
     rclc_node_init_default(&node, "pico_node", "", &support);
-    rclc_publisher_init_default(
+
+    // Initialize publisher
+    rcl_ret_t ret2 = rclc_publisher_init_default(
         &publisher,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
-        "pico_publisher");
+        "rp2040_topic");
+
+    // Initialize subscriber
+    ret = rclc_subscription_init_default(
+        &subscriber,
+        &node,
+        ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+        "rp2040_listener_topic"
+    );
+
+    if (ret != RCL_RET_OK) {
+        ws2812_set_rgb(1, 25, 0, 0);
+        return 1;
+    } else {
+        ws2812_set_rgb(1, 0, 20, 0);
+    }
 
     rclc_timer_init_default(
         &timer,
@@ -70,15 +142,22 @@ int main()
         RCL_MS_TO_NS(1000),
         timer_callback);
 
-    rclc_executor_init(&executor, &support.context, 1, &allocator);
+    rclc_executor_init(&executor, &support.context, 2, &allocator);
     rclc_executor_add_timer(&executor, &timer);
+    rclc_executor_add_subscription(&executor, &subscriber, &msg_int_sub, &subscription_callback, ON_NEW_DATA);
 
-    gpio_put(LED_PIN, 1);
-
-    msg.data = 0;
+    ws2812_set_rgb(0, 25, 10, 0);
+    msg_int.data = 0;
+    int counter = 0;
     while (true)
     {
         rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
+        counter += 1;
+        set_servo_angle(2, counter);
+        ws2812_update(true);
     }
+    rclc_executor_fini(&executor);
+    rcl_subscription_fini(&subscriber, &node);
+
     return 0;
 }
