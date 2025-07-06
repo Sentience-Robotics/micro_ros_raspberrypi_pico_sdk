@@ -10,7 +10,7 @@
 
 #include "pico/stdlib.h"
 #include "pico/stdio_usb.h"
-#include "pico_uart_transports/pico_uart_transports.h"
+#include "pico_uart_transport/pico_uart_transports.h"
 
 #include "hardware/pwm.h"
 #include "ws2812_leds/ws2812_set_rgb.h"
@@ -18,7 +18,8 @@
 #include <rmw_microros/rmw_microros.h>
 
 // Function to set servo angle using PWM (not working properly)
-void set_servo_angle(uint pin, int angle) {
+void set_servo_angle(uint pin, int angle)
+{
     uint slice = pwm_gpio_to_slice_num(pin);
     pwm_set_gpio_level(pin, 500 + (angle * 1000 / 180)); // Pulse width in µs mapped to 0.5ms - 2.5ms
     pwm_set_enabled(slice, true);
@@ -31,7 +32,8 @@ std_msgs__msg__Int32 msg_int_sub;
 
 void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
-     if (timer != NULL) {
+    if (timer != NULL)
+    {
         printf("Timer: %d\n", msg_int.data);
         set_servo_angle(1, msg_int.data); // Contrôle servo GPIO 1
         rcl_publish(&publisher, &msg_int, NULL);
@@ -39,11 +41,11 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
     }
 }
 
-void subscription_callback(const void * msgin);
+void subscription_callback(const void *msgin);
 
-void subscription_callback(const void * msgin)
+void subscription_callback(const void *msgin)
 {
-    const std_msgs__msg__Int32 * incoming = (const std_msgs__msg__Int32 *)msgin;
+    const std_msgs__msg__Int32 *incoming = (const std_msgs__msg__Int32 *)msgin;
     int value = incoming->data;
     ws2812_set_rgb(2, 0, value, value);
     set_servo_angle(3, value);
@@ -57,7 +59,8 @@ int main()
 {
     stdio_init_all();
 
-    while (!stdio_usb_connected()) {
+    while (!stdio_usb_connected())
+    {
         sleep_ms(100);
     }
 
@@ -65,16 +68,14 @@ int main()
     ws2812_init(pio1, 18, 800000.0f);
     ws2812_clear();
 
-
     printf("Entering program...\n");
     rmw_uros_set_custom_transport(
-		true,
-		NULL,
-		pico_serial_transport_open,
-		pico_serial_transport_close,
-		pico_serial_transport_write,
-		pico_serial_transport_read
-	);
+        true,
+        NULL,
+        pico_serial_transport_open,
+        pico_serial_transport_close,
+        pico_serial_transport_write,
+        pico_serial_transport_read);
 
     // Servo
     gpio_set_function(1, GPIO_FUNC_PWM);
@@ -83,7 +84,7 @@ int main()
     uint slice1 = pwm_gpio_to_slice_num(1);
     uint slice2 = pwm_gpio_to_slice_num(2);
     uint slice3 = pwm_gpio_to_slice_num(3);
-    pwm_set_wrap(slice1, 20000); // For ~50Hz PWM (20ms period)
+    pwm_set_wrap(slice1, 20000);   // For ~50Hz PWM (20ms period)
     pwm_set_clkdiv(slice1, 125.0); // Set clock divisor for 1us resolution
     pwm_set_wrap(slice2, 20000);
     pwm_set_clkdiv(slice2, 125.0);
@@ -126,13 +127,15 @@ int main()
         &subscriber,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
-        "rp2040_listener_topic"
-    );
+        "rp2040_listener_topic");
 
-    if (ret != RCL_RET_OK) {
+    if (ret != RCL_RET_OK)
+    {
         ws2812_set_rgb(1, 25, 0, 0);
         return 1;
-    } else {
+    }
+    else
+    {
         ws2812_set_rgb(1, 0, 20, 0);
     }
 
