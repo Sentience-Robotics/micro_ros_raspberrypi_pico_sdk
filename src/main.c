@@ -10,7 +10,7 @@
 
 #include "pico/stdlib.h"
 #include "pico/stdio_usb.h"
-#include "pico_uart_transport/pico_uart_transports.h"
+#include "pico_uart_transports/pico_uart_transports.h"
 
 #include "hardware/pwm.h"
 #include "ws2812_leds/ws2812_set_rgb.h"
