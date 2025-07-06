@@ -10,8 +10,8 @@ pico_sdk_init()
 
 link_directories(libmicroros)
 add_executable(pico_micro_ros_example
-    pico_micro_ros_example.c
-    pico_uart_transport.c
+    src/main.c
+    src/pico_uart_transport/pico_uart_transport.c
 )
 target_link_libraries(pico_micro_ros_example
     pico_stdlib
@@ -21,6 +21,7 @@ target_link_libraries(pico_micro_ros_example
 )
 
 target_include_directories(pico_micro_ros_example PUBLIC
+    include
     libmicroros/include
 )
 
@@ -37,4 +38,4 @@ add_compile_definitions(PICO_STDIO_DEFAULT_CRLF=0)
 # Generate UF2
 pico_add_extra_outputs(pico_micro_ros_example)
 
-add_subdirectory(ws2812_leds)
+add_subdirectory(lib/ws2812_leds)
