@@ -13,8 +13,8 @@
 #include "pico_uart_transports/pico_uart_transports.h"
 
 #include "hardware/pwm.h"
-#include "lib/ws2812_leds/ws2812_set_rgb.h"
-#include "lib/ws2812_leds/ws2812.h"
+#include "ws2812_set_rgb.h"
+#include "ws2812.h"
 #include <rmw_microros/rmw_microros.h>
 
 // Function to set servo angle using PWM (not working properly)
