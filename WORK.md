@@ -1,11 +1,15 @@
 ```bash
 docker run --rm -d -v /dev:/dev --privileged --net=host microros/micro-ros-agent:humble serial --dev /dev/ttyACM0 -b 115200
 
-cd /home/dev/micro_ros_raspberrypi_pico_sdk/build
+cd ~/lucy_ws/src/micro_ros_raspberrypi_pico_sdk/build
 cmake ..
 make
-picotool load pico_micro_ros_example.uf2 -f
-picotool reboot
+sudo picotool load pico_micro_ros_example.uf2 -f
+sudo picotool reboot -f
+
+# DEBUG
+ros2 topic echo /servo_subscriber
+ros2 topic echo /trace_publisher
 
 # ???
 cd /home/dev/lucy_ws/lucy_ros2/install
