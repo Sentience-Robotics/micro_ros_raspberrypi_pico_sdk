@@ -1,7 +1,4 @@
 #include <rclc/types.h>
-#include <hardware/pwm.h>
-
-#include <rosidl_typesupport_c/visibility_control.h>
 
 #include <std_msgs/msg/string.h>
 
@@ -19,7 +16,6 @@
 
 #include "ws2812_set_rgb.h"
 
-#include "util.h"
 #include "board.h"
 #include "constant.h"
 #include "enum.h"
@@ -28,6 +24,7 @@
 #include "joint.h"
 #include "debug.h"
 
+status_t CONNECTION_STATUS = KO;
 pico_uros_node_t node;
 rcl_publisher_t log_publisher;
 rcl_publisher_t trace_publisher;
@@ -35,21 +32,19 @@ rcl_publisher_t trace_publisher;
 rcl_timer_t uptime_timer;
 rcl_publisher_t uptime_publisher;
 
-static status_t ping_agent(int timeout_ms, int nb_attempts);
 extern status_t CONNECTION_STATUS;
 
 void uptime_timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
   empile_trace("uptime_timer_callback");
 
-  rcl_ret_t status;
   static std_msgs__msg__Int32 uptime = {};
 
   if (CONNECTION_STATUS == KO) {
     ws2812_set_rgb(5, (uptime.data % 2) * 10, 0, 0);
   } else {
     ws2812_set_rgb(5, 0, (uptime.data % 2) * 10, 0);
-    status = rcl_publish(&uptime_publisher, &uptime, NULL);
+    rcl_publish(&uptime_publisher, &uptime, NULL);
   }
   uptime.data = (uptime.data + 1);
 
@@ -87,6 +82,20 @@ status_t ping_agent(int timeout_ms, int nb_attempts) {
   return OK;
 }
 
+status_t create_topic(void) {
+  rclc_timer_init_default(&uptime_timer, &node.support, UPTIME_TIMER_INTERVAL, &uptime_timer_callback);
+  rclc_executor_add_timer(&node.executor, &uptime_timer);
+  rclc_publisher_init_default(&uptime_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), UPTIME_PUBLISHER_TOPIC_NAME);
+
+  sensor_msgs__msg__JointState__init(&joint_subscriber_data);
+  init_joint_subscriber_data();
+  rclc_subscription_init_default(&joint_subscriber, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState), SERVO_SUBSCRIBER_TOPIC_NAME);
+  rclc_executor_add_subscription(&node.executor, &joint_subscriber, &joint_subscriber_data, (void (*)(const void *))&joint_subscriber_callback, ON_NEW_DATA);
+
+  rclc_publisher_init_default(&log_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), LOG_PUBLISHER_TOPIC_NAME);
+  rclc_publisher_init_default(&trace_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), TRACE_PUBLISHER_TOPIC_NAME);
+}
+
 status_t create_node_pico(void) {
   node.allocator = rcl_get_default_allocator();
   if (ping_agent(TIMEOUT_MS, NB_ATTEMPTS) == KO) {
@@ -101,14 +110,19 @@ status_t create_node_pico(void) {
   if (rclc_executor_init(&node.executor, &node.support.context, NB_HANDLES, &node.allocator) != RCL_RET_OK) {
     return KO;
   }
-  rclc_timer_init_default(&uptime_timer, &node.support, UPTIME_TIMER_INTERVAL, &uptime_timer_callback);
-  rclc_executor_add_timer(&node.executor, &uptime_timer);
+  create_topic();
   return OK;
 }
 
-status_t destroy_node_pico(void) {
-  rmw_context_t *context = rcl_context_get_rmw_context(&node.support.context);
-  rcl_timer_fini(&uptime_timer);
+void destroy_topic(void) {
+  rcl_publisher_fini(&trace_publisher, &node.node);
+  rcl_publisher_fini(&log_publisher, &node.node);
+  rcl_subscription_fini(&joint_subscriber, &node.node);
+  rcl_publisher_fini(&uptime_publisher, &node.node);
+}
+
+void destroy_node_pico(void) {
+  destroy_topic();
   rclc_executor_fini(&node.executor);
   rcl_node_fini(&node.node);
   rclc_support_fini(&node.support);

@@ -11,13 +11,13 @@
 #include "constant.h"
 #include "pico_uart_transports/pico_uart_transports.h"
 #include "joint.h"
+#include "ros.h"
 
 status_t init_lucy(void);
 void dump_config(void);
 status_t ping_agent(int timeout_ms, int nb_attempts);
 
 bool IS_RUNNING = true;
-status_t CONNECTION_STATUS = KO;
 
 /* MICRO-ROS AGENT */
 
