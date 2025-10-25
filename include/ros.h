@@ -29,3 +29,5 @@ void init_pwm(void);
 void init_pwm_port(int16_t pin);
 static status_t init_led(void);
 static status_t init_i2c(int16_t sda_pin, int16_t scl_pin);
+
+void uptime_timer_callback(rcl_timer_t *timer, int64_t last_call_time);

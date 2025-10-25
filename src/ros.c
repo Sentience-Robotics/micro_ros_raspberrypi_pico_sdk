@@ -32,25 +32,20 @@ pico_uros_node_t node;
 rcl_publisher_t log_publisher;
 rcl_publisher_t trace_publisher;
 
-//rcl_timer_t update_timer;
 rcl_timer_t uptime_timer;
 rcl_publisher_t uptime_publisher;
 
-static status_t ping_agent(int timeout_ms, int nb_attempts) {
-  rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, nb_attempts);
-  if (ret != RCL_RET_OK)
-    return KO;
-  return OK;
-}
+static status_t ping_agent(int timeout_ms, int nb_attempts);
+extern status_t CONNECTION_STATUS;
 
-static void uptime_timer_callback(rcl_timer_t *timer, int64_t last_call_time)
+void uptime_timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
   empile_trace("uptime_timer_callback");
 
   rcl_ret_t status;
   static std_msgs__msg__Int32 uptime = {};
 
-  if (ping_agent(1000, 1) != OK) {
+  if (CONNECTION_STATUS == KO) {
     ws2812_set_rgb(5, (uptime.data % 2) * 10, 0, 0);
   } else {
     ws2812_set_rgb(5, 0, (uptime.data % 2) * 10, 0);
@@ -83,7 +78,16 @@ static void joint_subscriber_callback(const sensor_msgs__msg__JointState *inputs
 
 
 
-static status_t init_node(void) {
+
+
+status_t ping_agent(int timeout_ms, int nb_attempts) {
+  rcl_ret_t ret = rmw_uros_ping_agent(timeout_ms, nb_attempts);
+  if (ret != RCL_RET_OK)
+    return KO;
+  return OK;
+}
+
+status_t create_node_pico(void) {
   node.allocator = rcl_get_default_allocator();
   if (ping_agent(TIMEOUT_MS, NB_ATTEMPTS) == KO) {
     return KO;
@@ -97,18 +101,35 @@ static status_t init_node(void) {
   if (rclc_executor_init(&node.executor, &node.support.context, NB_HANDLES, &node.allocator) != RCL_RET_OK) {
     return KO;
   }
+  rclc_timer_init_default(&uptime_timer, &node.support, UPTIME_TIMER_INTERVAL, &uptime_timer_callback);
+  rclc_executor_add_timer(&node.executor, &uptime_timer);
   return OK;
 }
 
-status_t init_ros_pico(void) {
+status_t destroy_node_pico(void) {
+  rmw_context_t *context = rcl_context_get_rmw_context(&node.support.context);
+  rcl_timer_fini(&uptime_timer);
+  rclc_executor_fini(&node.executor);
+  rcl_node_fini(&node.node);
+  rclc_support_fini(&node.support);
+}
+
+
+
+
+
+/* ROS NODE */
+
+
+
+/*status_t init_ros_pico(void) {
   rmw_uros_set_custom_transport(true, NULL, &pico_serial_transport_open, &pico_serial_transport_close, &pico_serial_transport_write, &pico_serial_transport_read);
-  if (init_node() == KO)
+  if (create_node() == KO)
     return KO;
 
-  //rclc_timer_init_default(&update_timer, &node.support, UPDATE_TIMER_INTERVAL, &update_timer_callback);
-  rclc_timer_init_default(&uptime_timer, &node.support, UPTIME_TIMER_INTERVAL, &uptime_timer_callback);
-  rclc_executor_add_timer(&node.executor, &uptime_timer);
-  rclc_publisher_init_default(&uptime_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), UPTIME_PUBLISHER_TOPIC_NAME);
+  //rclc_timer_init_default(&uptime_timer, &node.support, UPTIME_TIMER_INTERVAL, &uptime_timer_callback);
+  //rclc_executor_add_timer(&node.executor, &uptime_timer);
+  /*rclc_publisher_init_default(&uptime_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), UPTIME_PUBLISHER_TOPIC_NAME);
 
   sensor_msgs__msg__JointState__init(&joint_subscriber_data);
   init_joint_subscriber_data();
@@ -117,6 +138,5 @@ status_t init_ros_pico(void) {
 
   rclc_publisher_init_default(&log_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), LOG_PUBLISHER_TOPIC_NAME);
   rclc_publisher_init_default(&trace_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), TRACE_PUBLISHER_TOPIC_NAME);
-
   return OK;
-}
+}*/

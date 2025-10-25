@@ -10,11 +10,12 @@
 #include "constant.h"
 #include "joint.h"
 #include "ros.h"
+#include "pico_uart_transports/pico_uart_transports.h"
+#include "rmw_microros/custom_transport.h"
 
 status_t init_led(void) {
   ws2812_init(pio1, DEBUG_LED_PIN, FREQ_HZ);
   ws2812_clear();
-  ws2812_set_rgb(0, 10, 10, 0);
   return OK;
 }
 
@@ -39,5 +40,7 @@ status_t init_lucy(void) {
   init_led();
   init_stdio();
   init_board();
-  return init_ros_pico();
+  rmw_uros_set_custom_transport(true, NULL, &pico_serial_transport_open, &pico_serial_transport_close, &pico_serial_transport_write, &pico_serial_transport_read);
+  sleep_ms(1000);
+  return OK;
 }

@@ -1,6 +1,7 @@
 #include "joint.h"
 #include "util.h"
 #include "board.h"
+#include "ws2812_set_rgb.h"
 
 double joints_angle[NB_JOINTS] = {};
 
@@ -12,7 +13,7 @@ rcl_subscription_t joint_config_subscriber = {};
 void internal_joint_init(board_t *board, joint_t *joint) {
   int sliceNum = pwm_gpio_to_slice_num(joint->config.physical_pin);
 
-  gpio_set_function(joint->config.physical_pin, GPIO_FUNC_PWM);
+  gpio_set_function(joint->config.physical_pin - 1 /* HERE */, GPIO_FUNC_PWM);
   pwm_init(sliceNum, &board->data.internal.pwm_config, true);
 }
 
