@@ -1,3 +1,5 @@
+#include <pico/stdlib.h>
+
 #include "ws2812_set_rgb.h"
 #include "ws2812.h"
 

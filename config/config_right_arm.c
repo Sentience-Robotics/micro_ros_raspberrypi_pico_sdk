@@ -1,3 +1,4 @@
+#include "constant.h"
 #include "joint.h"
 #include "board.h"
 
@@ -16,11 +17,10 @@ void dump_config(void) {
   // Shoulder Yaw
   joint->config.virtual_pin = 0;
   joint->config.physical_pin = 10;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 270;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 270;
-  joint->config.default_angle = 135;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 170; // 140
+  joint->config.security_max_angle = 200; // 230
+  joint->config.default_angle = 180;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -28,11 +28,10 @@ void dump_config(void) {
   // Shoulder Roll
   joint->config.virtual_pin = 1;
   joint->config.physical_pin = 11;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 270;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 270;
-  joint->config.default_angle = 135;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 140; //90
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 145;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -40,11 +39,10 @@ void dump_config(void) {
   // Elbow
   joint->config.virtual_pin = 2;
   joint->config.physical_pin = 12;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 270;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 270;
-  joint->config.default_angle = 135;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 100; // 40 min
+  joint->config.security_max_angle = 125;
+  joint->config.default_angle = 120;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -52,11 +50,10 @@ void dump_config(void) {
   // Wrist
   joint->config.virtual_pin = 3;
   joint->config.physical_pin = 13;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -64,11 +61,10 @@ void dump_config(void) {
   // Thumb
   joint->config.virtual_pin = 4;
   joint->config.physical_pin = 14;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -76,11 +72,10 @@ void dump_config(void) {
   // Index
   joint->config.virtual_pin = 5;
   joint->config.physical_pin = 15;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -88,11 +83,10 @@ void dump_config(void) {
   // Middle
   joint->config.virtual_pin = 6;
   joint->config.physical_pin = 16;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -100,11 +94,10 @@ void dump_config(void) {
   // Ring
   joint->config.virtual_pin = 7;
   joint->config.physical_pin = 17;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
@@ -112,11 +105,10 @@ void dump_config(void) {
   // Pinky
   joint->config.virtual_pin = 8;
   joint->config.physical_pin = 18;
-  joint->config.physical_min_angle = 0;
-  joint->config.physical_max_angle = 300;
-  joint->config.min_angle = 0;
-  joint->config.max_angle = 300;
-  joint->config.default_angle = 150;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 150;
+  joint->config.default_angle = 50;
   joint->config.init_callback = &internal_joint_init;
   joint->config.move_callback = &internal_joint_move;
   joint++;
