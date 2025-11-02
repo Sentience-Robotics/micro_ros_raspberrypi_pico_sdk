@@ -15,10 +15,9 @@ struct board_s;
 typedef struct joint_config_s {
   int16_t virtual_pin;
   int16_t physical_pin;
-  double physical_min_angle;
-  double physical_max_angle;
-  double min_angle;
-  double max_angle;
+  double servo_type;
+  double security_min_angle;
+  double security_max_angle;
   double default_angle;
 
   void (*init_callback)(struct board_s *board, struct joint_s *joint);

@@ -4,11 +4,15 @@ docker run --rm -d -v /dev:/dev --privileged --net=host microros/micro-ros-agent
 cd ~/lucy_ws/src/micro_ros_raspberrypi_pico_sdk/build
 cmake ..
 make
-sudo picotool load pico_micro_ros_example.uf2 -f
-sudo picotool reboot -f
+sudo picotool load pico_micro_ros_right_arm.uf2 -f --ser E6617C93E37A6629
+sudo picotool reboot -f --ser E6617C93E37A6629
+
+# OR
+pico-flash-right-arm
+pico-flash-left-arm
 
 # DEBUG
-ros2 topic echo /servo_subscriber
+ros2 topic echo /joints_right_arm
 ros2 topic echo /trace_publisher
 
 # ???
@@ -17,3 +21,6 @@ source setup.zsh
 
 ros2 topic echo rp2040_topic
 ```
+
+left arm : E6617C93E3858429
+right arm : E6617C93E37A6629

@@ -70,7 +70,7 @@ void init_joint_subscriber_data() {
 
 static void joint_subscriber_callback(const sensor_msgs__msg__JointState *inputs)
 {
-  empile_trace("servo_subscriber_callback");
+  empile_trace("joints_callback");
 
   for (size_t i = 0; i < NB_BOARDS; i++) {
     if (boards[i].joint_update != NULL) {
@@ -78,7 +78,7 @@ static void joint_subscriber_callback(const sensor_msgs__msg__JointState *inputs
     }
   }
 
-  depile_trace("servo_subscriber_callback");
+  depile_trace("joints_callback");
 }
 
 
@@ -112,7 +112,7 @@ status_t init_ros_pico(void) {
 
   sensor_msgs__msg__JointState__init(&joint_subscriber_data);
   init_joint_subscriber_data();
-  rclc_subscription_init_default(&joint_subscriber, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState), SERVO_SUBSCRIBER_TOPIC_NAME);
+  rclc_subscription_init_default(&joint_subscriber, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState), JOINTS_TOPIC_NAME);
   rclc_executor_add_subscription(&node.executor, &joint_subscriber, &joint_subscriber_data, (void (*)(const void *))&joint_subscriber_callback, ON_NEW_DATA);
 
   rclc_publisher_init_default(&log_publisher, &node.node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String), LOG_PUBLISHER_TOPIC_NAME);

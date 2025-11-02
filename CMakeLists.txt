@@ -2,16 +2,18 @@ cmake_minimum_required(VERSION 3.12)
 
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-project(pico_micro_ros_example C CXX ASM)
+project(pico_micro_ros C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
+
+set(PROJECT_NAME_LEFT_ARM ${PROJECT_NAME}_left_arm)
+set(PROJECT_NAME_RIGHT_ARM ${PROJECT_NAME}_right_arm)
 
 pico_sdk_init()
 
 link_directories(libmicroros)
 
-add_executable(pico_micro_ros_example
-   config/config.c
+set(SOURCE_FILE
     src/main.c
     src/ros.c
     src/debug.c
@@ -22,7 +24,18 @@ add_executable(pico_micro_ros_example
     src/pico_uart_transport/pico_uart_transport.c
 )
 
-target_link_libraries(pico_micro_ros_example
+add_executable(${PROJECT_NAME_RIGHT_ARM}
+    config/config_right_arm.c
+    ${SOURCE_FILE}
+)
+
+
+add_executable(${PROJECT_NAME_LEFT_ARM}
+    config/config_left_arm.c
+    ${SOURCE_FILE}
+)
+
+target_link_libraries(${PROJECT_NAME_RIGHT_ARM}
     pico_stdlib
     microros
     hardware_pwm
@@ -30,7 +43,20 @@ target_link_libraries(pico_micro_ros_example
     ws2812_leds
 )
 
-target_include_directories(pico_micro_ros_example PUBLIC
+target_link_libraries(${PROJECT_NAME_LEFT_ARM}
+    pico_stdlib
+    microros
+    hardware_pwm
+    hardware_i2c
+    ws2812_leds
+)
+
+target_include_directories(${PROJECT_NAME_RIGHT_ARM} PUBLIC
+    include
+    libmicroros/include
+)
+
+target_include_directories(${PROJECT_NAME_LEFT_ARM} PUBLIC
     include
     libmicroros/include
 )
@@ -40,13 +66,20 @@ SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
 
 # Configure Pico
-pico_enable_stdio_usb(pico_micro_ros_example 1)
-pico_enable_stdio_uart(pico_micro_ros_example 0)
+pico_enable_stdio_usb(${PROJECT_NAME_RIGHT_ARM} 1)
+pico_enable_stdio_usb(${PROJECT_NAME_LEFT_ARM} 1)
+pico_enable_stdio_uart(${PROJECT_NAME_RIGHT_ARM} 0)
+pico_enable_stdio_uart(${PROJECT_NAME_LEFT_ARM} 0)
 add_compile_definitions(PICO_UART_ENABLE_CRLF_SUPPORT=0)
 add_compile_definitions(PICO_STDIO_ENABLE_CRLF_SUPPORT=0)
 add_compile_definitions(PICO_STDIO_DEFAULT_CRLF=0)
 
+# Select Arm
+target_compile_definitions(${PROJECT_NAME_RIGHT_ARM} PRIVATE USE_RIGHT_ARM)
+target_compile_definitions(${PROJECT_NAME_LEFT_ARM} PRIVATE USE_LEFT_ARM)
+
 # Generate UF2
-pico_add_extra_outputs(pico_micro_ros_example)
+pico_add_extra_outputs(${PROJECT_NAME_RIGHT_ARM})
+pico_add_extra_outputs(${PROJECT_NAME_LEFT_ARM})
 
 add_subdirectory(lib/ws2812_leds)

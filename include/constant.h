@@ -35,8 +35,19 @@
 #define LOG_PUBLISHER_TOPIC_NAME  "log_publisher"
 #define TRACE_PUBLISHER_TOPIC_NAME  "trace_publisher"
 
-#define SERVO_SUBSCRIBER_TOPIC_NAME  "servo_subscriber"
+#ifdef USE_LEFT_ARM
+    #define JOINTS_TOPIC_NAME  "joints_left_arm"
+#elif USE_RIGHT_ARM
+    #define JOINTS_TOPIC_NAME  "joints_right_arm"
+#else
+    #define JOINTS_TOPIC_NAME  "joints"  // Default
+#endif
 
-// SERVO_SUBSCRIBER + TIMER
-#define NB_HANDLES    2
+#define NB_HANDLES    2  // TOPICS + TIMER, remember to increment
 #define NODE_NAME     "pico_node"
+
+#define CLAMP(val, min, max) ((val < min) ? min : (val > max) ? max : val)
+
+#define SERVO_TYPE_180 180
+#define SERVO_TYPE_270 270
+#define SERVO_TYPE_300 300
