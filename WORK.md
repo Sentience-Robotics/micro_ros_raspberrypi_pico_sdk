@@ -12,7 +12,7 @@ pico-flash-right-arm
 pico-flash-left-arm
 
 # DEBUG
-ros2 topic echo /joints_right_arm
+ros2 topic echo /joints/right_arm
 ros2 topic echo /trace_publisher
 
 # ???

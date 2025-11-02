@@ -36,11 +36,11 @@
 #define TRACE_PUBLISHER_TOPIC_NAME  "trace_publisher"
 
 #ifdef USE_LEFT_ARM
-    #define JOINTS_TOPIC_NAME  "joints_left_arm"
+    #define JOINTS_TOPIC_NAME  "joints/left_arm"
 #elif USE_RIGHT_ARM
-    #define JOINTS_TOPIC_NAME  "joints_right_arm"
+    #define JOINTS_TOPIC_NAME  "joints/right_arm"
 #else
-    #define JOINTS_TOPIC_NAME  "joints"  // Default
+    #define JOINTS_TOPIC_NAME  "joints/default"
 #endif
 
 #define NB_HANDLES    2  // TOPICS + TIMER, remember to increment
