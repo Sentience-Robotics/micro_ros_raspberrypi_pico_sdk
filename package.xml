@@ -4,7 +4,8 @@
   <name>pico_micro_ros</name>
   <version>3.0.2</version>
   <description>micro-ROS tools for Raspberry Pico SDK</description>
-  <maintainer email="pablogarrido@eprosima.com">Pablo Garrido</maintainer>
+  <maintainer email="eugeniocollado@eprosima.com">Eugenio Collado</maintainer>
+  <maintainer email="carlosespinoza@eprosima.com">Carlos Espinoza</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
