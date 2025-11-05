@@ -27,10 +27,6 @@ void internal_joint_update(board_t *board, const sensor_msgs__msg__JointState *i
       new_angle = inputs->position.data[board->data.internal.joints[i].config.virtual_pin];
       board->data.internal.joints[i].angle = new_angle;
       board->data.internal.joints[i].config.move_callback(board, &board->data.internal.joints[i]);
-      const char *msg;
-      asprintf(&msg, "moving internal joint %d (v%d) (p%d) to angle %f", i, board->data.internal.joints[i].config.virtual_pin, board->data.internal.joints[i].config.physical_pin, new_angle);
-      empile_trace(msg);
-      free((void *)msg);
     }
   }
 }
