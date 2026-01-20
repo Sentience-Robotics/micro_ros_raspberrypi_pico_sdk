@@ -1,10 +1,7 @@
 #pragma once
 
-#include <hardware/pwm.h>
-
-#include <rclc/node.h>
+#include <rclc/rclc.h>
 #include <rclc/executor.h>
-#include <rcl/allocator.h>
 
 #include "enum.h"
 
@@ -21,6 +18,8 @@ extern rcl_publisher_t trace_publisher;
 
 extern rcl_timer_t uptime_timer;
 extern rcl_publisher_t uptime_publisher;
+
+extern rcl_timer_t sensor_timer;
 
 status_t create_node_pico(void);
 void destroy_node_pico(void);

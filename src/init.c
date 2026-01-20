@@ -1,17 +1,12 @@
-#include <stdio.h>
+#include <hardware/adc.h>
 #include <pico/stdlib.h>
-#include <hardware/i2c.h>
-
-#include "ws2812.h"
-#include "ws2812_set_rgb.h"
+#include <rmw_microros/custom_transport.h>
 
 #include "board.h"
-#include "enum.h"
-#include "constant.h"
-#include "joint.h"
 #include "ros.h"
+#include "ws2812.h"
+#include "ws2812_set_rgb.h"
 #include "pico_uart_transports/pico_uart_transports.h"
-#include "rmw_microros/custom_transport.h"
 
 status_t init_led(void) {
   ws2812_init(pio1, DEBUG_LED_PIN, FREQ_HZ);
@@ -22,6 +17,7 @@ status_t init_led(void) {
 
 status_t init_stdio(void) {
   stdio_init_all();
+  adc_init();
   while (!stdio_usb_connected()) {
     sleep_ms(100);
   }

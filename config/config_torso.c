@@ -1,0 +1,98 @@
+#include "constant.h"
+#include "joint.h"
+#include "board.h"
+
+const board_t boardtmp = {2};
+
+
+void dump_config(void) {
+  memset(boards, 0, sizeof(boards));
+
+  // Setup internal board
+  board_t *internal = &boards[0];
+  internal->init = &internal_init;
+  internal->on_joint_subscriber_update = &internal_on_joint_subscriber_update;
+  internal->on_sensor_timer_tick = &internal_on_sensor_timer_tick;
+
+  board_t *adafruit = ++internal;
+  adafruit->pin.i2c.sda = INTERNAL_I2C_SDA;
+  adafruit->pin.i2c.scl = INTERNAL_I2C_SCL;
+  adafruit->pin.i2c.port = INTERNAL_I2C_PORT;
+  adafruit->init = &adafruit_init;
+  adafruit->on_joint_subscriber_update = &adafruit_on_joint_subscriber_update;
+
+  // Setup servo
+
+  joint_t *joint = internal->data.internal.joints;
+
+  // TORSO ROLL
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_1;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 270;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+
+  // TORSO YAW
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_2;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 270;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+
+  // NECK PITCH
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_3;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 270;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+
+  // NECK YAW
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_4;
+  joint->config.servo_type = SERVO_TYPE_300;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 300;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+
+#if 0
+  // LEFT SHOULDER PITCH
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_5;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 270;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+
+
+  // RIGHT SOULDER PITCH
+  joint->config.virtual_pin = 0;
+  joint->config.physical_pin = INTERNAL_SERVO_6;
+  joint->config.servo_type = SERVO_TYPE_270;
+  joint->config.security_min_angle = 0;
+  joint->config.security_max_angle = 270;
+  joint->config.default_angle = 135;
+  joint->config.init_joint = &internal_joint_init;
+  joint->config.move_joint = &internal_joint_move;
+  joint++;
+#endif
+
+  joint = adafruit->data.adafruit.joints;
+}
