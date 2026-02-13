@@ -60,9 +60,16 @@
 
 #define CLAMP(val, min, max) ((val < min) ? min : (val > max) ? max : val)
 
-#define SERVO_TYPE_180 180
-#define SERVO_TYPE_270 270
-#define SERVO_TYPE_300 300
+#ifndef M_PI
+    #define M_PI    3.14159265358979323846
+#endif
+
+#define DEG_TO_RAD(x)   (x * M_PI / 180.0f)
+#define RAD_TO_DEG(x)   (x * 180.0f / M_PI)
+
+#define SERVO_TYPE_180 DEG_TO_RAD(180)
+#define SERVO_TYPE_270 DEG_TO_RAD(270)
+#define SERVO_TYPE_300 DEG_TO_RAD(300)
 
 #define EPSILON 0.0001
 
