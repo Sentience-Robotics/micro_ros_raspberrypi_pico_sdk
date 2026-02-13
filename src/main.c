@@ -1,11 +1,7 @@
-#include <pico/stdlib.h>
+#include <pico/time.h>
 
-#include "ws2812_set_rgb.h"
-
-#include "enum.h"
-#include "joint.h"
 #include "ros.h"
-#include "rcl/logging_rosout.h"
+#include "ws2812_set_rgb.h"
 
 status_t init_lucy(void);
 void dump_config(void);

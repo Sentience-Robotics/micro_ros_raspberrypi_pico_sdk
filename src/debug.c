@@ -1,10 +1,9 @@
 #include "debug.h"
-#include "ros.h"
-#include "constant.h"
 
 #include <std_msgs/msg/string.h>
 
-#include <stdarg.h>
+#include "constant.h"
+#include "ros.h"
 
 void empile_trace(const char *function_name) {
   char output[MAX_LOG_SIZE];
