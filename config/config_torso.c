@@ -26,71 +26,71 @@ void dump_config(void) {
   joint_t *joint = internal->data.internal.joints;
 
   // TORSO ROLL
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_1;
-  joint->config.servo_type = SERVO_TYPE_270;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 270;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_1;
+  joint->config.servo_type =          SERVO_TYPE_270;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(270);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 
   // TORSO YAW
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_2;
-  joint->config.servo_type = SERVO_TYPE_270;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 270;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_2;
+  joint->config.servo_type =          SERVO_TYPE_270;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(270);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 
   // NECK PITCH
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_3;
-  joint->config.servo_type = SERVO_TYPE_270;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 270;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_3;
+  joint->config.servo_type =          SERVO_TYPE_270;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(270);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 
   // NECK YAW
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_4;
-  joint->config.servo_type = SERVO_TYPE_300;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 300;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_4;
+  joint->config.servo_type =          SERVO_TYPE_300;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(300);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 
 #if 0
   // LEFT SHOULDER PITCH
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_5;
-  joint->config.servo_type = SERVO_TYPE_270;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 270;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_5;
+  joint->config.servo_type =          SERVO_TYPE_270;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(270);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 
 
   // RIGHT SOULDER PITCH
-  joint->config.virtual_pin = 0;
-  joint->config.physical_pin = INTERNAL_SERVO_6;
-  joint->config.servo_type = SERVO_TYPE_270;
-  joint->config.security_min_angle = 0;
-  joint->config.security_max_angle = 270;
-  joint->config.default_angle = 135;
-  joint->config.init_joint = &internal_joint_init;
-  joint->config.move_joint = &internal_joint_move;
+  joint->config.virtual_pin =         0;
+  joint->config.physical_pin =        INTERNAL_SERVO_6;
+  joint->config.servo_type =          SERVO_TYPE_270;
+  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_max_angle =  DEG_TO_RAD(270);
+  joint->config.default_angle =       DEG_TO_RAD(135);
+  joint->config.init_joint =          &internal_joint_init;
+  joint->config.move_joint =          &internal_joint_move;
   joint++;
 #endif
 
