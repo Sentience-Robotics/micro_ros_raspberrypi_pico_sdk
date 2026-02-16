@@ -18,9 +18,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         0;
   joint->config.physical_pin =        INTERNAL_SERVO_10;
   joint->config.servo_type =          SERVO_TYPE_270;
-  joint->config.security_min_angle =  DEG_TO_RAD(170); // 140
-  joint->config.security_max_angle =  DEG_TO_RAD(200); // 230
-  joint->config.default_angle =       DEG_TO_RAD(180);
+  joint->config.security_min_angle =  DEG_TO_RAD(155); // 140
+  joint->config.security_max_angle =  DEG_TO_RAD(165); // 230
+  joint->config.default_angle =       DEG_TO_RAD(160);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -30,8 +30,8 @@ void dump_config(void) {
   joint->config.physical_pin =        INTERNAL_SERVO_11;
   joint->config.servo_type =          SERVO_TYPE_270;
   joint->config.security_min_angle =  DEG_TO_RAD(140); //90
-  joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(145);
+  joint->config.security_max_angle =  DEG_TO_RAD(180);
+  joint->config.default_angle =       DEG_TO_RAD(180);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -41,8 +41,8 @@ void dump_config(void) {
   joint->config.physical_pin =        INTERNAL_SERVO_12;
   joint->config.servo_type =          SERVO_TYPE_270;
   joint->config.security_min_angle =  DEG_TO_RAD(100); // 40 min
-  joint->config.security_max_angle =  DEG_TO_RAD(125);
-  joint->config.default_angle =       DEG_TO_RAD(120);
+  joint->config.security_max_angle =  DEG_TO_RAD(110);
+  joint->config.default_angle =       DEG_TO_RAD(100);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -52,8 +52,8 @@ void dump_config(void) {
   joint->config.physical_pin =        INTERNAL_SERVO_13;
   joint->config.servo_type =          SERVO_TYPE_300;
   joint->config.security_min_angle =  DEG_TO_RAD(0);
-  joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.security_max_angle =  DEG_TO_RAD(230);
+  joint->config.default_angle =       DEG_TO_RAD(150);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -62,9 +62,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         4;
   joint->config.physical_pin =        INTERNAL_SERVO_14;
   joint->config.servo_type =          SERVO_TYPE_300;
-  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_min_angle =  DEG_TO_RAD(36);
   joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.default_angle =       DEG_TO_RAD(36);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -73,9 +73,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         5;
   joint->config.physical_pin =        INTERNAL_SERVO_15;
   joint->config.servo_type =          SERVO_TYPE_300;
-  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_min_angle =  DEG_TO_RAD(16);
   joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.default_angle =       DEG_TO_RAD(16);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -84,9 +84,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         6;
   joint->config.physical_pin =        INTERNAL_SERVO_16;
   joint->config.servo_type =          SERVO_TYPE_300;
-  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_min_angle =  DEG_TO_RAD(21);
   joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.default_angle =       DEG_TO_RAD(21);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -95,9 +95,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         7;
   joint->config.physical_pin =        INTERNAL_SERVO_17;
   joint->config.servo_type =          SERVO_TYPE_300;
-  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_min_angle =  DEG_TO_RAD(33);
   joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.default_angle =       DEG_TO_RAD(33);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
@@ -106,9 +106,9 @@ void dump_config(void) {
   joint->config.virtual_pin =         8;
   joint->config.physical_pin =        INTERNAL_SERVO_18;
   joint->config.servo_type =          SERVO_TYPE_300;
-  joint->config.security_min_angle =  DEG_TO_RAD(0);
+  joint->config.security_min_angle =  DEG_TO_RAD(30);
   joint->config.security_max_angle =  DEG_TO_RAD(150);
-  joint->config.default_angle =       DEG_TO_RAD(50);
+  joint->config.default_angle =       DEG_TO_RAD(30);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
