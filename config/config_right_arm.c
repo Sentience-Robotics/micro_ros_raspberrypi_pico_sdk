@@ -16,22 +16,22 @@ void dump_config(void) {
 
   // Shoulder Yaw
   joint->config.virtual_pin =         0;
-  joint->config.physical_pin =        INTERNAL_SERVO_10;
+  joint->config.physical_pin =        INTERNAL_SERVO_11;
   joint->config.servo_type =          SERVO_TYPE_270;
-  joint->config.security_min_angle =  DEG_TO_RAD(155); // 140
-  joint->config.security_max_angle =  DEG_TO_RAD(165); // 230
-  joint->config.default_angle =       DEG_TO_RAD(160);
+  joint->config.security_min_angle =  DEG_TO_RAD(140);
+  joint->config.security_max_angle =  DEG_TO_RAD(180);
+  joint->config.default_angle =       DEG_TO_RAD(180);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
 
   // Shoulder Roll
   joint->config.virtual_pin =         1;
-  joint->config.physical_pin =        INTERNAL_SERVO_11;
+  joint->config.physical_pin =        INTERNAL_SERVO_10;
   joint->config.servo_type =          SERVO_TYPE_270;
-  joint->config.security_min_angle =  DEG_TO_RAD(140); //90
-  joint->config.security_max_angle =  DEG_TO_RAD(180);
-  joint->config.default_angle =       DEG_TO_RAD(180);
+  joint->config.security_min_angle =  DEG_TO_RAD(155);
+  joint->config.security_max_angle =  DEG_TO_RAD(165);
+  joint->config.default_angle =       DEG_TO_RAD(160);
   joint->config.init_joint =          &internal_joint_init;
   joint->config.move_joint =          &internal_joint_move;
   joint++;
