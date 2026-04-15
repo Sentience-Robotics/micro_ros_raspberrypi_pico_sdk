@@ -84,6 +84,8 @@ docker run -it --rm -v $(pwd):/project microros/micro_ros_static_library_builder
 ```
 
 Note that folders added to `microros_static_library/library_generation/extra_packages` and entries added to `microros_static_library/library_generation/extra_packages/extra_packages.repos` will be taken into account by this build system.
+
+**Note:** The `lucy_msgs` source package has been moved to [`lucy_ros_packages`](https://github.com/Sentience-Robotics/lucy_ros_packages). The precompiled headers in `libmicroros/include/lucy_msgs/` remain and are used by the firmware at compile time. If `lucy_msgs` message definitions change, `libmicroros` must be rebuilt using the Docker builder with `lucy_msgs` referenced from `lucy_ros_packages` via `extra_packages.repos`.
 ## How to use Pico SDK?
 
 Here is a Raspberry Pi Pico C/C++ SDK documentation:
