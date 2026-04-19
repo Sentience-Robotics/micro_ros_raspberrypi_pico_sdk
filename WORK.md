@@ -24,3 +24,5 @@ ros2 topic echo rp2040_topic
 
 left arm : E6617C93E3858429
 right arm : E6617C93E37A6629
+
+The same values are stored under **`boards.*.serial_id`** in **`thais_urdf/config/hardware/active.yaml`** (torso serial TBD). Flash with `picotool load … --ser <serial_id>`.

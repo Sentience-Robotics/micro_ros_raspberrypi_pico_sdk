@@ -75,15 +75,34 @@ pico_enable_stdio_uart(pico_micro_ros_example 1)
 
 ## How to build the precompiled library
 
-Micro-ROS is precompiled for Raspberry Pi Pico in [`libmicroros`](libmicroros).
-If you want to compile it by yourself:
+Micro-ROS is precompiled for Raspberry Pi Pico in [`libmicroros`](libmicroros) (this directory is gitignored; generate it locally when needed).
+
+Extra interfaces are picked up from `library_generation/extra_packages/` and `library_generation/extra_packages/extra_packages.repos`.
+
+**Note:** The `lucy_msgs` package lives in [`lucy_ros_packages`](https://github.com/Sentience-Robotics/lucy_ros_packages) and is imported during the library build. Rebuild `libmicroros` after changing those definitions.
+
+### Native build (no Docker)
+
+Requires a ROS 2 Humble environment with `micro_ros_setup`, `PICO_SDK_PATH` pointing at the Pico SDK, the `arm-none-eabi-*` toolchain, and `vcs` (from ROS dev tools). From the repository root:
+
+```bash
+source /opt/ros/humble/setup.bash
+cd micro_ros_raspberrypi_pico_sdk
+rm -rf firmware   # optional: force a clean micro-ROS workspace
+bash library_generation/library_generation.sh
+```
+
+Outputs are written under `libmicroros/` (`libmicroros.a` and `libmicroros/include/`).
+
+### Docker build
+
+The upstream image expects a `microros_static_library/` prefix; this repository keeps scripts under `library_generation/` at the top level, so set `MICROROS_LIBRARY_FOLDER` to `.`:
 
 ```bash
 docker pull microros/micro_ros_static_library_builder:humble
-docker run -it --rm -v $(pwd):/project microros/micro_ros_static_library_builder:humble
+docker run -it --rm -v "$(pwd)":/project -e MICROROS_LIBRARY_FOLDER=. microros/micro_ros_static_library_builder:humble
 ```
 
-Note that folders added to `microros_static_library/library_generation/extra_packages` and entries added to `microros_static_library/library_generation/extra_packages/extra_packages.repos` will be taken into account by this build system.
 ## How to use Pico SDK?
 
 Here is a Raspberry Pi Pico C/C++ SDK documentation:

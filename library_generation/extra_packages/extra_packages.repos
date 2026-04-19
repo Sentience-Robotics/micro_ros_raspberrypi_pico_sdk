@@ -3,3 +3,7 @@ repositories:
     type: git
     url: https://github.com/ros-controls/control_msgs
     version: humble
+  lucy_ros_packages:
+    type: git
+    url: https://github.com/Sentience-Robotics/lucy_ros_packages
+    version: master # change if required to target branch with last version of lucy_msgs

@@ -37,17 +37,17 @@ set(LIBRARIES
 )
 
 add_executable(${PROJECT_NAME_RIGHT_ARM}
-    config/config_right_arm.c
+    config/config_rp2040_right_arm.c
     ${SOURCE_FILE}
 )
 
 add_executable(${PROJECT_NAME_LEFT_ARM}
-        config/config_left_arm.c
+        config/config_rp2040_left_arm.c
         ${SOURCE_FILE}
 )
 
 add_executable(${PROJECT_NAME_TORSO}
-        config/config_torso.c
+        config/config_rp2040_torso_head.c
         ${SOURCE_FILE}
 )
 
